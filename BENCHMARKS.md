@@ -1,4 +1,4 @@
-# GDMCode benchmark evidence (private draft)
+# GDMCode benchmark evidence
 
 All values below are from the pinned ADTC profiler `0.1.0`, but the environment
 is explicitly `audit_cloud_vm`, not `participant_laptop`. They are an audit
@@ -13,5 +13,17 @@ The 4B artifact is pinned by SHA-256
 2B alternative is pinned by SHA-256
 `ea443cd07fb307e0bfb332864c569ebbd8419427de7547029e3a36ca1f231e4b`.
 
-**Participant-laptop result:** `NOT MEASURED`. No official score, thermal
-claim, or accuracy result should be inferred from this table.
+## Local participant-mode performance pass
+
+The exact pinned organizer profiler commit
+`ac2e137dca65ea3b09d997774f17dd8907b489fb` ran locally in `participant` mode,
+CPU-only, on Windows 11 with an Intel i7-1355U-class CPU and 31.6 GiB installed
+RAM. The profiler saw no GPU.
+
+| Generation | First token | Peak RSS | Steady RSS | CPU p99 | Sperf | Seff |
+|---:|---:|---:|---:|---:|---:|---:|
+| 2.48 tok/s | 35,889.12 ms | 4,428.49 MiB | 4,243.42 MiB | 100% | **16.53** | **38.22** |
+
+The GGUF parser measured 4,205,751,296 parameters and confirmed the claimed 4B
+size. Windows did not expose a temperature reading. This runtime-only pass used
+`--skip-accuracy`, so no accuracy or thermal score is claimed.

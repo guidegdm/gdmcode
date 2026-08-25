@@ -6,7 +6,12 @@ language model with a typed lesson UI, a bounded practice checker, and a
 permission-gated Build tether. The model suggests; the harness controls what is
 rendered, checked, written, and rolled back.
 
-This directory is the clean ADTC submission-repository staging tree. It is
+GDMCode has both a CLI and a visual PWA. The CLI manages model registration,
+Offline policy, status, terminal chat, backups, and launch; `gdmcode learn`
+starts the authenticated local service and opens the learner interface. Both
+surfaces use the same verified model and policy boundary.
+
+This is the clean ADTC submission repository. It is
 deliberately weight-free: personal workbench notes, private datasets, AWS
 configuration, private evaluations, and the live website are not part of this
 tree. `model/` is populated only by `download_model.sh` on the evaluator's
@@ -88,8 +93,8 @@ instructions are in [`docs/INSTALLATION.md`](docs/INSTALLATION.md).
 [`BENCHMARKS.md`](BENCHMARKS.md) separates the existing cloud audit envelope
 from the official participant-laptop score. The cloud audit measured 2.92
 tokens/s and 2,846.14 MiB peak RSS on its own VM; those numbers are **not** an
-ADTC participant score. Accuracy and thermal results remain `NOT MEASURED`
-until the clean Ubuntu 22.04 participant run is completed.
+ADTC participant score. The checked-in profiler report and benchmark page
+distinguish measured results from claims that have not been tested.
 
 Small local models can be wrong, omit edge cases, or misunderstand ambiguous
 requirements. Review generated code, do not use it for security-critical work
@@ -104,10 +109,11 @@ without an expert, and do not treat a checker result as proof of correctness.
 | `REPORT.md` | Problem, design decisions, constraints, and evidence |
 | `MODEL_CARD.md` | Intended use, limitations, and model provenance |
 | `BENCHMARKS.md` | Clearly labelled audit and participant status |
+| `SELF_EVALUATION.md` | Held-out beginner, student, course, child-build, and harness results |
 | `docs/ARCHITECTURE.md` | Product and safety boundaries |
 | `docs/EVALUATION.md` | Reproducible evaluator procedure |
 | `docs/INSTALLATION.md` | Windows binary and Ubuntu source installation |
-| `docs/media/` | Clearly labelled fixture-only UI previews |
+| `docs/media/` | Real runtime screenshots plus labelled design previews |
 | `app/` | Reviewed standalone Rust core and embedded Learn PWA |
 | `install-gdmcode.ps1` | Checksum-pinned per-user Windows installer |
 | `model/` | Empty in git; populated by the downloader |
@@ -116,6 +122,7 @@ The upstream ADTC template license and notices remain in `LICENSE`.
 
 ## UI preview gallery
 
-The [`docs/media/`](docs/media/) gallery shows the intended offline hero,
-lesson/quiz, bounded practice, and Build tether surfaces. These are visual
-previews only; the final media should use the real daemon and frozen model.
+The [`docs/media/`](docs/media/) gallery includes four real captures from the
+Windows binary and frozen 4B model: Offline hero, lesson/quiz, bounded local
+practice, and Build tether with a streamed local-model answer. Older design
+previews remain explicitly labelled as previews.

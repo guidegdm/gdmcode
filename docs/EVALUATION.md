@@ -40,11 +40,13 @@ thermal result, and the profiler's accuracy result exactly as measured.
 
 ## What not to claim
 
-The current 2.92 tokens/s and 2,846.14 MiB values are from an `audit_cloud_vm`
-run on a different machine. They are useful for an engineering envelope but
-must not be entered as the ADTC participant Sperf/Seff or presented as the
-official laptop score. Participant accuracy and thermal evidence are still
-`NOT MEASURED` in this staging tree.
+The 2.92 tokens/s and 2,846.14 MiB values are from an `audit_cloud_vm` run on a
+different machine. They are useful for an engineering envelope but are not the
+participant scores. The local participant-mode performance pass measured 2.48
+tokens/s and 4,428.49 MiB peak RSS, producing Sperf 16.53 and Seff 38.22.
+Because that pass used `--skip-accuracy` and Windows exposed no temperature
+sensor, no participant accuracy or temperature claim is made.
 
-The UI preview images outside this clean repository are fixture-only visual
-references. They are not model-generation, latency, or profiler evidence.
+The four `*-real.png` gallery images were captured from the frozen model and
+real local daemon. Files named `*-preview.png` remain fixture-only design
+references and are not model-generation, latency, or profiler evidence.

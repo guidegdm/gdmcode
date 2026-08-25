@@ -1,6 +1,6 @@
-# GDMCode model card (private draft)
+# GDMCode model card
 
-**Status:** draft; not an official submission.
+**Status:** ADTC 2026 submitted candidate.
 
 ## Model summary
 
@@ -34,8 +34,11 @@ The raw 2B alternative has no GDMCode fine-tuning data applied.
 
 The current audit evidence is reported in `BENCHMARKS.md`. It was collected on
 an audit cloud VM and must not be represented as the official participant-laptop
-score. Accuracy is `NOT MEASURED` in that audit. The official participant run,
-final candidate freeze, and public hosting decision remain open.
+score. Accuracy is `NOT MEASURED` in that audit. The local participant-mode
+performance pass and its explicit accuracy limitation are documented in
+`BENCHMARKS.md`. A full hidden-accuracy audit remains open. The candidate is
+frozen at the checksum above and publicly hosted through the credential-free
+URL in `download_model.sh`.
 
 ## Limitations and privacy
 
@@ -43,12 +46,11 @@ Small local models can misunderstand ambiguous requirements, produce incorrect
 code, or omit edge cases. Verify all generated code. The model artifact is
 intended to run offline after download; the broader GDMCode product may have
 separate optional online capabilities. No training data, credentials, AWS
-configuration, or private evaluation cases are present in this draft.
+configuration, or private evaluation cases are present in this repository.
 
 ## License and reproducibility
 
-The project model-selection record identifies the Qwen base as Apache-2.0; the
-exact upstream model notice must be carried with the final hosted artifact and
-rechecked before publication. The ADTC template license and notices are kept in
-`LICENSE`. See `artifact-manifest.json`, `metadata.json`, and `download_model.sh`
+The project model-selection record identifies the Qwen base as Apache-2.0.
+The ADTC template license and notices are kept in `LICENSE`. See
+`artifact-manifest.json`, `metadata.json`, and `download_model.sh`
 for the pinned artifact path, checksum, and credential-free download contract.
