@@ -11,11 +11,11 @@ not model or benchmark evidence.
 the frozen 4B GGUF verified, registered, loaded, and forced into Offline mode.
 The next three images come from the same authenticated loopback session.
 
-![Real beginner lesson and quiz](02-lesson-quiz-real.png)
+![Real beginner lesson](02-beginner-lesson-real.png)
 
-![Real bounded local practice check](03-practice-checker-real.png)
+![Real bounded local practice check](03-bounded-practice-result-real.png)
 
-![Real Build tether with streamed local-model answer](04-build-tether-real.png)
+![Real Build tether with streamed local-model answer](04-build-tether-local-answer-real.png)
 
 Together these show the actual product loop: learn a concept, check a small
 exercise without arbitrary host execution, then ask the local 4B model beside
