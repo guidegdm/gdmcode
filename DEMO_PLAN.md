@@ -1,4 +1,4 @@
-# Two-minute ADTC demo plan (private draft)
+# Two-minute ADTC demo plan
 
 This is a deterministic recording outline. Real-model screenshots and the
 final public repository URL are still pending.

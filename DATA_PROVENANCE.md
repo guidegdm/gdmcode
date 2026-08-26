@@ -1,4 +1,4 @@
-# Data provenance summary (private draft)
+# Data provenance summary
 
 This document describes the public-boundary decision, not the private model-lab
 records.

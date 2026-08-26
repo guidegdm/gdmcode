@@ -11,11 +11,13 @@ Offline policy, status, terminal chat, backups, and launch; `gdmcode learn`
 starts the authenticated local service and opens the learner interface. Both
 surfaces use the same verified model and policy boundary.
 
-This is the clean ADTC submission repository. It is
-deliberately weight-free: personal workbench notes, private datasets, AWS
-configuration, private evaluations, and the live website are not part of this
-tree. `model/` is populated only by `download_model.sh` on the evaluator's
-machine.
+This is the public ADTC submission and release repository. It contains the
+submission contract, release binary/runtime assets, checksums, licenses,
+notices, and reproducible installation instructions. It does not contain the GDMCode
+application source code; that source is maintained in a separate private
+repository. Personal workbench notes, private datasets, AWS configuration,
+private evaluations, and the live website are not part of this tree.
+`model/` is populated only by `download_model.sh` on the evaluator's machine.
 
 ## Why this is different
 
@@ -75,18 +77,23 @@ and [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the harness boundary.
 
 ## Install the GDMCode application
 
-The repository includes the reviewed application source under [`app/`](app/)
-and a checksum-pinned Windows installer. On Windows 10/11 x64:
+The public release contains the prebuilt Windows x64 application/runtime bundle,
+its SHA-256 checksum, and the bundled license notices. Application source is
+kept private and is not required to install or run the release. On Windows
+10/11 x64:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\install-gdmcode.ps1 -WithModel
 gdmcode learn
 ```
 
-The first command installs the GDMCode binary, official llama.cpp CPU runtime,
-and exact 4B model without administrator privileges. The second starts the
-local daemon and prints the authenticated `/learn` URL. Ubuntu build/package
-instructions are in [`docs/INSTALLATION.md`](docs/INSTALLATION.md).
+The first command verifies and installs the public GDMCode binary and official
+llama.cpp CPU runtime without administrator privileges. With `-WithModel` it
+also downloads and verifies the public 4B model. Use `-Models Spark` for the
+smaller public 2B model or `-Models Both` for both models. The second command
+starts the local daemon and prints the authenticated `/learn` URL. See
+[`docs/INSTALLATION.md`](docs/INSTALLATION.md) for the release layout,
+checksums, notices, and installation details.
 
 ## Evidence and honest limits
 
@@ -106,19 +113,23 @@ without an expert, and do not treat a checker result as proof of correctness.
 |---|---|
 | `metadata.json` | ADTC identity, model pin, and exactly two test prompts |
 | `download_model.sh` | Credential-free HTTPS download plus checksum gate |
+| `RELEASE_CHECKSUMS.txt` | Release bundle and public model SHA-256 values |
+| `licenses/` | GDMCode, llama.cpp, and runtime license texts |
+| `THIRD-PARTY-NOTICES.md` | Redistribution notice for bundled components |
 | `REPORT.md` | Problem, design decisions, constraints, and evidence |
 | `MODEL_CARD.md` | Intended use, limitations, and model provenance |
 | `BENCHMARKS.md` | Clearly labelled audit and participant status |
 | `SELF_EVALUATION.md` | Held-out beginner, student, course, child-build, and harness results |
 | `docs/ARCHITECTURE.md` | Product and safety boundaries |
 | `docs/EVALUATION.md` | Reproducible evaluator procedure |
-| `docs/INSTALLATION.md` | Windows binary and Ubuntu source installation |
+| `docs/INSTALLATION.md` | Binary installation, checksums, and notices |
 | `docs/media/` | Real runtime screenshots plus labelled design previews |
-| `app/` | Reviewed standalone Rust core and embedded Learn PWA |
 | `install-gdmcode.ps1` | Checksum-pinned per-user Windows installer |
+| `update-gdmcode.ps1` | Checksum-pinned release updater |
 | `model/` | Empty in git; populated by the downloader |
 
-The upstream ADTC template license and notices remain in `LICENSE`.
+The upstream ADTC template license remains in `LICENSE`; bundled application
+and runtime license texts are in [`licenses/`](licenses/).
 
 ## UI preview gallery
 
