@@ -12,7 +12,7 @@ $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
 $BundleUrl = "https://github.com/guidegdm/gdmcode/releases/download/v0.2.112-adtc/gdmcode-v0.2.112-windows-x64.zip"
-$BundleSha256 = "7df0cb44b5eadca82bb58af52c4514f2c681055446501e70c59cb60db9923124a020350f3d07b7f9ec187b1e0d"
+$BundleSha256 = "03b2a634c5d9fe45d2dc207e9824a8ea1d26164666cb02a75aed04beab1fdd47"
 if ($BundleSha256Override) { $BundleSha256 = $BundleSha256Override.ToLowerInvariant() }
 $ModelSpecs = @{
     Spark = @{
