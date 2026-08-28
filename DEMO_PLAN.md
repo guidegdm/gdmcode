@@ -1,7 +1,8 @@
 # Two-minute ADTC demo plan
 
-This is a deterministic recording outline. Real-model screenshots and the
-final public repository URL are still pending.
+This is a deterministic recording outline for the verified release. Use the
+current public repository and rebuilt release bundle when recording; do not
+present this outline itself as runtime evidence.
 
 | Time | Action | Evidence shown |
 |---|---|---|
@@ -13,5 +14,6 @@ final public repository URL are still pending.
 | 1:35–1:50 | Show the local `llama.cpp` process and a network-disabled proof. | local inference plus policy enforcement |
 | 1:50–2:00 | State limitations and hand off to the profiler report. | no invented accuracy or participant score |
 
-The final recording must use the frozen candidate and matching clean-room
-profile; this draft must not be presented as the final submission.
+The recording must use the frozen candidate and matching clean-room profile.
+Keep participant results and any unavailable accuracy result explicitly
+labelled; this plan does not create new benchmark claims.

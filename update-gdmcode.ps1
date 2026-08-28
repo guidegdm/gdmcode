@@ -10,10 +10,10 @@ Set-StrictMode -Version Latest
 
 <#
   Apply a complete, checksum-pinned GDMCode bundle update. The installer
-  stages and verifies the bundle before moving the current application aside;
-  learner state and verified GGUFs live outside the bundle and are untouched.
-  Run this after closing active GDMCode windows. A failed switch restores the
-  previous bundle automatically.
+  downloads and verifies the complete bundle before copying it into the
+  existing per-user installation. Learner state and verified GGUFs are
+  preserved. Run this after closing active GDMCode windows; if a file is still
+  locked, the installer stops and can be rerun after the process exits.
 #>
 
 $Installer = Join-Path $PSScriptRoot "install-gdmcode.ps1"
@@ -34,6 +34,6 @@ if ($BundleSha256Override) {
 
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $Installer @Arguments
 if ($LASTEXITCODE -ne 0) {
-    throw "GDMCode update failed; the prior bundle remains selected when rollback was possible"
+    throw "GDMCode update failed; close active GDMCode processes and rerun the updater"
 }
 Write-Host "GDMCode application bundle updated. Existing models and learner state were preserved."

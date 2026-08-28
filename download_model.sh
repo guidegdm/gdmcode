@@ -3,9 +3,23 @@ set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MODEL_DIR="$HERE/model"
-MODEL_FILE="$MODEL_DIR/qwen35-4b-Q4_K_M.gguf"
-EXPECTED_SHA256="514c57feaeead5cc7803421327389a3cdca397cb5d84a6848f4616b916fd2ee9"
-DEFAULT_MODEL_URL="https://d2aewvy0a2lorh.cloudfront.net/adtc-2026/sha256-514c57feaeead5cc7803421327389a3cdca397cb5d84a6848f4616b916fd2ee9/qwen35-4b-Q4_K_M.gguf"
+MODEL_CHOICE="${GDMCODE_MODEL:-${1:-spark}}"
+case "${MODEL_CHOICE,,}" in
+  spark|2b)
+    MODEL_FILE="$MODEL_DIR/qwen35-2b-Q4_K_M.gguf"
+    EXPECTED_SHA256="ea443cd07fb307e0bfb332864c569ebbd8419427de7547029e3a36ca1f231e4b"
+    DEFAULT_MODEL_URL="https://d2aewvy0a2lorh.cloudfront.net/adtc-2026/sha256-ea443cd07fb307e0bfb332864c569ebbd8419427de7547029e3a36ca1f231e4b/qwen35-2b-Q4_K_M.gguf"
+    ;;
+  forge|4b)
+    MODEL_FILE="$MODEL_DIR/qwen35-4b-Q4_K_M.gguf"
+    EXPECTED_SHA256="514c57feaeead5cc7803421327389a3cdca397cb5d84a6848f4616b916fd2ee9"
+    DEFAULT_MODEL_URL="https://d2aewvy0a2lorh.cloudfront.net/adtc-2026/sha256-514c57feaeead5cc7803421327389a3cdca397cb5d84a6848f4616b916fd2ee9/qwen35-4b-Q4_K_M.gguf"
+    ;;
+  *)
+    echo "usage: $0 [spark|forge]" >&2
+    exit 2
+    ;;
+esac
 MODEL_URL="${GDMCODE_MODEL_URL:-$DEFAULT_MODEL_URL}"
 
 if [[ -z "$MODEL_URL" ]]; then

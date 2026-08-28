@@ -20,7 +20,7 @@ of training. Scores are proportions from 0 to 1, not official ADTC scores.
 | Can a child build a small, enjoyable project? | **0.8080** | The strongest 4B advantage; good project guidance, with some missed milestones and safeguards. |
 | Can it assist a programming student? | **0.8785** | Useful for explanation, debugging, and tests; generated code still requires review. |
 | Can it generate courses and quizzes? | **1.0000** | Both held-out structured course/quiz cases passed under the full output budget. |
-| Can it work through the GDMCode/GrokBuild harness? | **0.6932** | Two real bounded read/edit/test traces completed, but broad agentic reliability is not claimed. |
+| Can it work through the GDMCode coding harness? | **0.6932** | Two real bounded read/edit/test traces completed, but broad agentic reliability is not claimed. |
 | Is it ready for the local ADTC contract? | **0.5000** | The GGUF and offline runtime work; the remaining gap is standardized participant-hardware evidence and some explicit safety wording. |
 
 **Aggregate:** **0.8666**. **Full rubric passes:** **9/19**.

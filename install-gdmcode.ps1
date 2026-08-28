@@ -11,8 +11,8 @@ param(
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
-$BundleUrl = "https://github.com/guidegdm/gdmcode/releases/download/v0.1.0-adtc/gdmcode-v0.1.0-windows-x64.zip"
-$BundleSha256 = "e676433c0705cfb3a2dd522cbb77bed7dfbee6cd48f2b8544915c1cf603d8de8"
+$BundleUrl = "https://github.com/guidegdm/gdmcode/releases/download/v0.2.112-adtc/gdmcode-v0.2.112-windows-x64.zip"
+$BundleSha256 = "7df0cb44b5eadca82bb58af52c4514f2c681055446501e70c59cb60db9923124a020350f3d07b7f9ec187b1e0d"
 if ($BundleSha256Override) { $BundleSha256 = $BundleSha256Override.ToLowerInvariant() }
 $ModelSpecs = @{
     Spark = @{
@@ -35,7 +35,7 @@ $Zip = Join-Path $Stage "gdmcode-windows-x64.zip"
 
 if ($WithModel) {
     if ($Models -ne "None") { throw "Use either -WithModel or -Models, not both" }
-    $Models = "Forge"
+    $Models = "Spark"
 }
 
 function Assert-Sha256([string]$Path, [string]$Expected) {
@@ -59,10 +59,13 @@ try {
     Assert-Sha256 $Zip $BundleSha256
 
     Expand-Archive -LiteralPath $Zip -DestinationPath $Stage
-    $Source = Join-Path $Stage "gdmcode-v0.1.0-windows-x64"
-    if (-not (Test-Path -LiteralPath (Join-Path $Source "bin\gdmcode.exe"))) {
-        throw "verified bundle has an unexpected layout"
+    $ReleaseRoots = @(Get-ChildItem -LiteralPath $Stage -Directory | Where-Object {
+        Test-Path -LiteralPath (Join-Path $_.FullName "bin\gdmcode.exe")
+    })
+    if ($ReleaseRoots.Count -ne 1) {
+        throw "verified bundle must contain exactly one release root with bin\gdmcode.exe"
     }
+    $Source = $ReleaseRoots[0].FullName
     New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
     Copy-Item -Path (Join-Path $Source "*") -Destination $InstallDir -Recurse -Force
 
@@ -106,10 +109,21 @@ try {
                 id = $Spec.Id
                 model = @{ path = $ModelPath; sha256 = $Spec.Sha256; bytes = $Spec.Bytes }
                 llama_server = @{ path = $ServerPath; sha256 = $ServerSha; bytes = (Get-Item -LiteralPath $ServerPath).Length }
-                runtime = @{ host = "127.0.0.1"; port = 8767; context_size = 4096; threads = [Math]::Max(1, [Math]::Min(8, [Environment]::ProcessorCount)); extra_args = @("--jinja", "--no-webui") }
+                # Leave room for harness instructions plus a useful repository
+                # prompt while remaining practical for the default 2B model.
+                runtime = @{ host = "127.0.0.1"; port = 8767; context_size = 16384; threads = [Math]::Max(1, [Math]::Min(8, [Environment]::ProcessorCount)); extra_args = @("--jinja", "--no-webui") }
             }
-            $Manifest | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $ManifestPath -Encoding utf8
-            & (Join-Path $BinDir "gdmcode.exe") model add $ManifestPath
+            $ManifestJson = $Manifest | ConvertTo-Json -Depth 8
+            [IO.File]::WriteAllText(
+                $ManifestPath,
+                $ManifestJson,
+                (New-Object System.Text.UTF8Encoding($false))
+            )
+            $RegisterArgs = @("model", "add", $ManifestPath)
+            if ($Models -eq "Both" -and $ModelName -eq "Forge") {
+                $RegisterArgs += "--no-activate"
+            }
+            & (Join-Path $BinDir "gdmcode.exe") @RegisterArgs
             if ($LASTEXITCODE -ne 0) { throw "model registration failed for $ModelName" }
         }
     }

@@ -1,4 +1,4 @@
-# GDMCode — an offline coding tutor for the laptop Africa actually has
+# GDMCode — local coding agent and adaptive learning studio
 
 GDMCode is a local-first programming tutor and coding harness for beginners,
 students, and unreliable-connectivity environments. It combines a small local
@@ -6,18 +6,20 @@ language model with a typed lesson UI, a bounded practice checker, and a
 permission-gated Build tether. The model suggests; the harness controls what is
 rendered, checked, written, and rolled back.
 
-GDMCode has both a CLI and a visual PWA. The CLI manages model registration,
-Offline policy, status, terminal chat, backups, and launch; `gdmcode learn`
-starts the authenticated local service and opens the learner interface. Both
-surfaces use the same verified model and policy boundary.
+GDMCode has a terminal coding-agent TUI and a visual learning PWA. The release
+executable contains both surfaces and the PWA assets, while the bundled CPU
+inference runtime is shipped beside it. The TUI provides the local coding
+harness, repository tools, permissions, and model conversation; `gdmcode learn`
+starts the authenticated local service and opens the learner interface.
+Management commands handle model registration, Offline policy, status,
+backups, and launch. Both surfaces use the same verified model and policy
+boundary.
 
-This is the public ADTC submission and release repository. It contains the
-submission contract, release binary/runtime assets, checksums, licenses,
-notices, and reproducible installation instructions. It does not contain the GDMCode
-application source code; that source is maintained in a separate private
-repository. Personal workbench notes, private datasets, AWS configuration,
-private evaluations, and the live website are not part of this tree.
-`model/` is populated only by `download_model.sh` on the evaluator's machine.
+This public ADTC submission distributes the Windows application, model setup,
+checksums, licenses, notices, and evaluation metadata. Application source,
+development records, private datasets, and cloud configuration are not part of
+the distribution. `model/` remains empty in Git and is populated by the
+download scripts on the user's machine.
 
 ## Why this is different
 
@@ -50,21 +52,60 @@ is an explicit user choice and is outside the offline benchmark contract.
 The raw Qwen3.5-2B Q4_K_M artifact is retained as the lower-resource comparison
 in the engineering record; it is not silently substituted for this 4B lane.
 
-## Quick start
+## Install on Windows
 
-On a clean Ubuntu 22.04 checkout:
+The release bundle contains the Windows x64 application and official
+`llama.cpp` CPU runtime. Models are downloaded separately so either public
+model can be selected without replacing the application.
+
+On Windows 10/11 x64, run from the repository root:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install-gdmcode.ps1 -WithModel
+```
+
+The installer verifies the release bundle, installs it per-user without
+administrator privileges, downloads and registers the Spark 2B model, and
+adds `gdmcode` to the user PATH. Then open a new PowerShell window:
+
+```powershell
+gdmcode
+gdmcode learn
+```
+
+`gdmcode` opens the terminal coding-agent TUI. `gdmcode learn` starts the local
+service and prints the authenticated `/learn` URL. `-WithModel` installs the
+smaller Spark 2B by default; use `-Models Forge` for the 4B model or
+`-Models Both` to install both public models. The installer writes models to
+`%LOCALAPPDATA%\Programs\GDMCode\model`, creates checksum-pinned manifests,
+and registers them in the local catalog so the binary can identify them.
+
+The installer and models use credential-free HTTPS downloads and pinned
+SHA-256 checks. See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for the
+release layout, checksums, licenses, and notices.
+
+## ADTC evaluation
+
+The challenge's reference environment is Ubuntu 22.04. For a quick local test,
+download the smaller public Spark 2B artifact with:
 
 ```bash
 ./download_model.sh
 ```
 
-The downloader rejects missing or non-HTTPS URLs, downloads to a temporary
-file, verifies the pinned SHA-256, and atomically moves the verified artifact
-into `model/`. It never needs AWS credentials. Do not commit the resulting
-`.gguf` file. `GDMCODE_MODEL_URL` remains available only as an explicit HTTPS
-override for controlled mirrors and tests.
+To download the submitted 4B Forge artifact instead, run:
 
-Run the pinned participant profiler exactly as the organizer specifies:
+```bash
+./download_model.sh forge
+```
+
+The downloader rejects missing or non-HTTPS URLs, downloads to a temporary
+file, verifies the selected model's pinned SHA-256, and atomically moves the
+verified artifact into `model/`. It never needs AWS credentials. Do not commit
+the resulting `.gguf` file. `GDMCODE_MODEL_URL` is available only as an
+explicit HTTPS override for controlled mirrors and tests.
+
+Run the pinned participant profiler from the repository root:
 
 ```bash
 python3 -m pip install \
@@ -74,26 +115,6 @@ adtc-profiler run --submission . --mode participant --output submission.json
 
 See [`docs/EVALUATION.md`](docs/EVALUATION.md) for the clean-room procedure
 and [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the harness boundary.
-
-## Install the GDMCode application
-
-The public release contains the prebuilt Windows x64 application/runtime bundle,
-its SHA-256 checksum, and the bundled license notices. Application source is
-kept private and is not required to install or run the release. On Windows
-10/11 x64:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\install-gdmcode.ps1 -WithModel
-gdmcode learn
-```
-
-The first command verifies and installs the public GDMCode binary and official
-llama.cpp CPU runtime without administrator privileges. With `-WithModel` it
-also downloads and verifies the public 4B model. Use `-Models Spark` for the
-smaller public 2B model or `-Models Both` for both models. The second command
-starts the local daemon and prints the authenticated `/learn` URL. See
-[`docs/INSTALLATION.md`](docs/INSTALLATION.md) for the release layout,
-checksums, notices, and installation details.
 
 ## Evidence and honest limits
 
