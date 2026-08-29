@@ -12,7 +12,7 @@ $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
 $BundleUrl = "https://github.com/guidegdm/gdmcode/releases/download/v0.2.112-adtc/gdmcode-v0.2.112-windows-x64.zip"
-$BundleSha256 = "03b2a634c5d9fe45d2dc207e9824a8ea1d26164666cb02a75aed04beab1fdd47"
+$BundleSha256 = "e7696572ba688e4837c62408fa8278561780826b13bb1ab130c8bd0bd5193778"
 if ($BundleSha256Override) { $BundleSha256 = $BundleSha256Override.ToLowerInvariant() }
 $ModelSpecs = @{
     Spark = @{
@@ -114,9 +114,10 @@ try {
                 id = $Spec.Id
                 model = @{ path = $ModelPath; sha256 = $Spec.Sha256; bytes = $Spec.Bytes }
                 llama_server = @{ path = $ServerPath; sha256 = $ServerSha; bytes = (Get-Item -LiteralPath $ServerPath).Length }
-                # Leave room for harness instructions plus a useful repository
-                # prompt while remaining practical for the default 2B model.
-                runtime = @{ host = "127.0.0.1"; port = 8767; context_size = 16384; threads = [Math]::Max(1, [Math]::Min(8, [Environment]::ProcessorCount)); extra_args = @("--jinja", "--no-webui") }
+                # Keep Spark light on 8 GB machines while giving Forge enough
+                # room for repository prompts. Both values leave headroom for
+                # the local UI, SQLite, and the rest of the desktop.
+                runtime = @{ host = "127.0.0.1"; port = 8767; context_size = $(if ($ModelName -eq "Spark") { 4096 } else { 8192 }); threads = [Math]::Max(1, [Math]::Min($(if ($ModelName -eq "Spark") { 4 } else { 8 }), [Environment]::ProcessorCount)); extra_args = @("--jinja", "--no-webui") }
             }
             $ManifestJson = $Manifest | ConvertTo-Json -Depth 8
             [IO.File]::WriteAllText(
