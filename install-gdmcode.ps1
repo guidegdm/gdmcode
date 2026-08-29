@@ -70,10 +70,15 @@ try {
     Copy-Item -Path (Join-Path $Source "*") -Destination $InstallDir -Recurse -Force
 
     $BinDir = Join-Path $InstallDir "bin"
+    $LegacyBinDir = Join-Path $InstallDir "current\bin"
     $CurrentUserPath = [Environment]::GetEnvironmentVariable("Path", "User")
-    $PathItems = @($CurrentUserPath -split ";" | Where-Object { $_ })
-    if ($PathItems -notcontains $BinDir) {
-        $NewPath = (@($PathItems) + $BinDir) -join ";"
+    $PathItems = @($CurrentUserPath -split ";" | Where-Object {
+        $_ -and
+        -not [String]::Equals($_.TrimEnd('\'), $LegacyBinDir.TrimEnd('\'), [StringComparison]::OrdinalIgnoreCase) -and
+        -not [String]::Equals($_.TrimEnd('\'), $BinDir.TrimEnd('\'), [StringComparison]::OrdinalIgnoreCase)
+    })
+    $NewPath = (@($BinDir) + $PathItems) -join ";"
+    if ($NewPath -ne $CurrentUserPath) {
         [Environment]::SetEnvironmentVariable("Path", $NewPath, "User")
     }
 
