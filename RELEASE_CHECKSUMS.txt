@@ -2,8 +2,8 @@ GDMCode public release checksums
 
 Windows x64 application bundle used by install-gdmcode.ps1:
   File: gdmcode-v0.2.112-windows-x64.zip
-  Bytes: 75062399
-  SHA-256: 56f9b0d5e6e8aa9145e0961268b85efb0449761e63203bf18d1bfcafe0a7ba34
+  Bytes: 75062738
+  SHA-256: b603abd9585d49cf44a132637d10f89a21e45010464b4d35296ef4bbd3067314
 
 The release bundle contains the GDMCode executable, the official llama.cpp
 CPU runtime, and the licenses directory. Model files are distributed as
