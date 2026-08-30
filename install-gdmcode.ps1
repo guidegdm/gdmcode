@@ -114,10 +114,12 @@ try {
                 id = $Spec.Id
                 model = @{ path = $ModelPath; sha256 = $Spec.Sha256; bytes = $Spec.Bytes }
                 llama_server = @{ path = $ServerPath; sha256 = $ServerSha; bytes = (Get-Item -LiteralPath $ServerPath).Length }
-                # Keep Spark light on 8 GB machines while giving Forge enough
-                # room for repository prompts. Both values leave headroom for
-                # the local UI, SQLite, and the rest of the desktop.
-                runtime = @{ host = "127.0.0.1"; port = 8767; context_size = $(if ($ModelName -eq "Spark") { 4096 } else { 8192 }); threads = [Math]::Max(1, [Math]::Min($(if ($ModelName -eq "Spark") { 4 } else { 8 }), [Environment]::ProcessorCount)); extra_args = @("--jinja", "--no-webui") }
+                # The harness tool definitions and system prompt can use about
+                # 10K tokens before the first model answer. Keep one context
+                # profile for both public models so the same installation does
+                # not fail with a context-size 400 error when switching models.
+                # 12K still leaves Spark practical on an 8 GB machine.
+                runtime = @{ host = "127.0.0.1"; port = 8767; context_size = 12288; threads = [Math]::Max(1, [Math]::Min($(if ($ModelName -eq "Spark") { 4 } else { 8 }), [Environment]::ProcessorCount)); extra_args = @("--jinja", "--no-webui") }
             }
             $ManifestJson = $Manifest | ConvertTo-Json -Depth 8
             [IO.File]::WriteAllText(
